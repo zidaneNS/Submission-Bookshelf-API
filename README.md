@@ -44,12 +44,20 @@
 * insertedAt from new Date().toISOString()
 * updatedAt = insertedAt
 ***
-* if response fail
-* status code : 400
+* if readPage > pageCount
+* status code: 400
 ```json
 {
     "status": "fail",
     "message": "Gagal menambahkan buku. readPage tidak boleh lebih besar dari pageCount"
+}
+```
+* if name property null
+* status code: 400
+```json
+{
+    "status": "fail",
+    "message": "Gagal menambahkan buku. Mohon isi nama buku"
 }
 ```
 * if response success
@@ -154,6 +162,19 @@ or
 {
     method: 'PUT',
     path: '/books/{bookId}'
+}
+```
+* request body
+```javascript
+{
+    "name": string,
+    "year": number,
+    "author": string,
+    "summary": string,
+    "publisher": string,
+    "pageCount": number,
+    "readPage": number,
+    "reading": boolean
 }
 ```
 * if name property null
