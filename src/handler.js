@@ -55,29 +55,69 @@ const addBookHandler = (req, h) => {
 };
 
 const getAllBooksHandler = (req, h) => {
-  if (books.length>0) {
-    const displayBooks = books.map((book)=>{
-      return {
-        id: book.id,
-        name: book.name,
-        publisher: book.publisher
-      };
-    });
+  const reading = req.query.reading;
 
-    return h.response({
-      status: 'success',
-      data: {
-        books: displayBooks
-      }
-    });
+  if (reading) {
+    if (reading === 1) {
+      const readingBooks = books.filter((book) => book.reading === true);
+      const displayBooks = readingBooks.map((book) => {
+        return {
+          id: book.id,
+          name: book.name,
+          publisher: book.publisher
+        };
+      });
+
+      return h.response({
+        status: 'success',
+        data: {
+          books: displayBooks
+        }
+      });
+
+    } else {
+      const unreadingBooks = books.filter((book) => book.reading === false);
+      const displayBooks = unreadingBooks.map((book) => {
+        return {
+          id: book.id,
+          name: book.name,
+          publisher: book.publisher
+        };
+      });
+      return h.response({
+        status: 'success',
+        data: {
+          books: displayBooks
+        }
+      });
+    }
   } else {
-    return h.response({
-      status: 'success',
-      data: {
-        books
-      }
-    });
+
+    if (books.length>0) {
+      const displayBooks = books.map((book)=>{
+        return {
+          id: book.id,
+          name: book.name,
+          publisher: book.publisher
+        };
+      });
+
+      return h.response({
+        status: 'success',
+        data: {
+          books: displayBooks
+        }
+      });
+    } else {
+      return h.response({
+        status: 'success',
+        data: {
+          books
+        }
+      });
+    }
   }
+
 };
 
 const getBookByIdHandler = (req, h) => {
