@@ -55,68 +55,33 @@ const addBookHandler = (req, h) => {
 };
 
 const getAllBooksHandler = (req, h) => {
-  const reading = req.query.reading;
+  const { reading, finished, name } = req.query;
 
-  if (reading) {
-    if (reading === 1) {
-      const readingBooks = books.filter((book) => book.reading === true);
-      const displayBooks = readingBooks.map((book) => {
-        return {
-          id: book.id,
-          name: book.name,
-          publisher: book.publisher
-        };
-      });
+  let filteredBooks = books;
 
-      return h.response({
-        status: 'success',
-        data: {
-          books: displayBooks
-        }
-      });
-
-    } else {
-      const unreadingBooks = books.filter((book) => book.reading === false);
-      const displayBooks = unreadingBooks.map((book) => {
-        return {
-          id: book.id,
-          name: book.name,
-          publisher: book.publisher
-        };
-      });
-      return h.response({
-        status: 'success',
-        data: {
-          books: displayBooks
-        }
-      });
-    }
-  } else {
-
-    if (books.length>0) {
-      const displayBooks = books.map((book)=>{
-        return {
-          id: book.id,
-          name: book.name,
-          publisher: book.publisher
-        };
-      });
-
-      return h.response({
-        status: 'success',
-        data: {
-          books: displayBooks
-        }
-      });
-    } else {
-      return h.response({
-        status: 'success',
-        data: {
-          books
-        }
-      });
-    }
+  if (reading !== undefined) {
+    filteredBooks = filteredBooks.filter((book) => book.reading === (reading === '1'));
   }
+  if (finished !== undefined) {
+    filteredBooks = filteredBooks.filter((book) => book.finished === (finished === '1'));
+  }
+  if (name !== undefined) {
+    filteredBooks = filteredBooks.filter((book) => book.name.toLowerCase().includes(name.toLowerCase()));
+  }
+
+  const diplayBooks = filteredBooks.map((book) => {
+    return {
+      id: book.id,
+      name: book.name,
+      publisher: book.publisher
+    };
+  });
+  return h.response({
+    status: 'success',
+    data: {
+      books: diplayBooks
+    }
+  });
 
 };
 
